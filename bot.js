@@ -84,6 +84,8 @@ async function iniciarBot() {
   client.on('message', async msg => {
     try {
       const chat = await msg.getChat();
+      logConsole(`📩 Mensagem recebida de ${chat.name || chat.id.user}: ${msg.body}`);
+
 
       if (msg.body.toLowerCase() === '!id') {
         const groupId = chat.id._serialized;
@@ -97,6 +99,8 @@ async function iniciarBot() {
       if (!ESCUTAR_TODOS && !grupoAutorizado(chat.id._serialized)) return;
 
       const links = linkExtractor(msg.body);
+      logConsole(`🔍 Links detectados: ${JSON.stringify(links)}`);
+
       for (const link of links) {
         const groupCode = link.split('/').pop();
 
