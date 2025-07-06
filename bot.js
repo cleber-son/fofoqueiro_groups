@@ -64,10 +64,12 @@ async function iniciarBot() {
     const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        headless: false, // Deixa o navegador visível (ideal para testes)
+        executablePath: '/usr/bin/chromium',
+        headless: false,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
+    },
     });
+
 
 
   client.on('qr', qr => {
