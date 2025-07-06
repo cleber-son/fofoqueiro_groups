@@ -77,15 +77,19 @@ async function iniciarBot() {
   });
 
   client.on('message', async msg => {
+    
     try {
-      const chat = await msg.getChat();
-      logConsole(`📩 Mensagem recebida de ${chat.name || chat.id.user}: ${msg.body}`);
+        const chat = await msg.getChat();
+        logConsole(`📩 Mensagem recebida: ${msg.body}`); // <-- aqui
 
-      const links = linkExtractor(msg.body);
-      if (!links.length) {
+        const links = linkExtractor(msg.body);
+        logConsole(`🔍 Links detectados: ${JSON.stringify(links)}`); // <-- aqui
+
+        if (!links.length) {
         logConsole(`❌ Nenhum link de grupo detectado.`);
         return;
-      }
+        }
+
 
       for (const link of links) {
         const groupCode = link.split('/').pop();
