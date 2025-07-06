@@ -93,7 +93,7 @@ async function iniciarBot() {
         return;
       }
 
-      if (!chat.isGroup) return;
+      //if (!chat.isGroup) return; escuta apenas grupos
       if (!ESCUTAR_TODOS && !grupoAutorizado(chat.id._serialized)) return;
 
       const links = linkExtractor(msg.body);
