@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
   libx11-6 libxrender1 libxkbcommon0 ca-certificates \
   --no-install-recommends && apt-get clean
 
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -16,3 +18,4 @@ COPY . .
 
 
 CMD ["node", "index.js"]
+
