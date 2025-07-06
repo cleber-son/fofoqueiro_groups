@@ -18,7 +18,7 @@ const ESPERA_CARREGAR_CHAT_MS = parseInt(process.env.ESPERA_CARREGAR_CHAT_MS) ||
 const TECLA_TODOS = (process.env.TECLA_TODOS || 'M').toLowerCase();
 const TECLA_NOVOS = (process.env.TECLA_NOVOS || 'N').toLowerCase();
 
-let historicoEntrada = []; // [{ id, timestamp }]
+let historicoEntrada = [];
 
 function logConsole(mensagem) {
   const timestamp = new Date().toISOString();
@@ -51,11 +51,6 @@ function grupoJaVisitado(id) {
   return fs.readFileSync(gruposVisitadosPath, 'utf8').includes(id);
 }
 
-function grupoAutorizado(id) {
-  if (!fs.existsSync(gruposAutorizadosPath)) return false;
-  return fs.readFileSync(gruposAutorizadosPath, 'utf8').includes(id);
-}
-
 function esperar(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -84,19 +79,14 @@ async function iniciarBot() {
   client.on('message', async msg => {
     try {
       const chat = await msg.getChat();
+      logConsole(`📩 Mensagem recebida de ${chat.name || chat.id.user}: ${msg.body}`);
 
-      if (msg.body.toLowerCase() === '!id') {
-        const groupId = chat.id._serialized;
-        const groupName = chat.name || 'Sem nome';
-        fs.appendFileSync(gruposAutorizadosPath, `${groupId} - ${groupName}\n`);
-        logConsole(`✅ Grupo autorizado: ${groupName} (${groupId})`);
+      const links = linkExtractor(msg.body);
+      if (!links.length) {
+        logConsole(`❌ Nenhum link de grupo detectado.`);
         return;
       }
 
-      //if (!chat.isGroup) return; escuta apenas grupos
-      if (!ESCUTAR_TODOS && !grupoAutorizado(chat.id._serialized)) return;
-
-      const links = linkExtractor(msg.body);
       for (const link of links) {
         const groupCode = link.split('/').pop();
 
@@ -117,7 +107,6 @@ async function iniciarBot() {
           continue;
         }
 
-        // Tentar localizar o grupo após entrada
         let joinedChat = null;
         for (let tentativa = 1; tentativa <= 5; tentativa++) {
           await esperar(ESPERA_CARREGAR_CHAT_MS);
@@ -127,7 +116,7 @@ async function iniciarBot() {
         }
 
         if (!joinedChat) {
-          logConsole(`⚠️ Entrou no grupo (${groupCode}), mas não conseguiu localizar o chat na lista.`);
+          logConsole(`⚠️ Entrou no grupo (${groupCode}), mas não conseguiu localizar o chat.`);
           salvarGrupoVisitado(groupCode, "Aguardando sincronia");
           salvarLogEntrada(`${groupCode} - Aguardando sincronia`);
           await esperar(DELAY_ENTRADA);
@@ -149,8 +138,6 @@ async function iniciarBot() {
       salvarLogErro(`Erro geral: ${err.message}`);
     }
   });
-
-  client.initialize();
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -186,6 +173,8 @@ async function iniciarBot() {
       }
     }
   });
+
+  client.initialize();
 }
 
 module.exports = { iniciarBot };
