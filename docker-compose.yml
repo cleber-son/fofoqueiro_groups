@@ -5,11 +5,10 @@ services:
     env_file:
       - .env
     working_dir: /app
+    stdin_open: true       
+    tty: true              
     volumes:
       - ./.wwebjs_auth:/app/.wwebjs_auth
       - ./.wwebjs_cache:/app/.wwebjs_cache
       - ./logs:/app/logs
     restart: unless-stopped
-
-
-
