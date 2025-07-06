@@ -59,7 +59,7 @@ async function iniciarBot() {
   const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-      headless: false, // estava true
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
   });
@@ -77,27 +77,17 @@ async function iniciarBot() {
   });
 
   client.on('message', async msg => {
-    
     try {
-        const chat = await msg.getChat();
-        logConsole(`📩 Mensagem recebida: ${msg.body}`); // <-- aqui
+      const chat = await msg.getChat();
+      if (!chat.isGroup) return;
 
-        const links = linkExtractor(msg.body);
-        logConsole(`🔍 Links detectados: ${JSON.stringify(links)}`); // <-- aqui
-
-        if (!links.length) {
-        logConsole(`❌ Nenhum link de grupo detectado.`);
-        return;
-        }
-
+      const links = linkExtractor(msg.body);
+      if (!links.length) return;
 
       for (const link of links) {
         const groupCode = link.split('/').pop();
 
-        if (grupoJaVisitado(groupCode)) {
-          logConsole(`🔁 Grupo já visitado: ${groupCode}`);
-          continue;
-        }
+        if (grupoJaVisitado(groupCode)) continue;
 
         logConsole(`➡️ Tentando entrar no grupo com link: ${link}`);
 
