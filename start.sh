@@ -1,30 +1,14 @@
 #!/bin/bash
-#
-#<!-- 
-#==================================================
-#🤖 WhatsApp Multifunction Bot – By Cleberson Souza
-#==================================================
-# Author: Cleberson Souza
-# Email: cleberson.brasil@gmail.com
-# Created: 2025-06-29
-# Version: 2.0.1
-# License: MIT
-# Description:
-#   A powerful, multi-purpose WhatsApp bot with scheduled commands, 
-#   weather, news, currency conversions, AI, forbidden word alerts, and more.
-#==================================================
-#-->
-#
 
+#==================================================
+# 🤖 WhatsApp Multifunction Bot – By Cleberson Souza
+#==================================================
 
 # Função para criar pastas se não existirem
 check_and_create_folders() {
-  for dir in logs .wwebjs_auth .webjs_cache; do
+  for dir in logs .wwebjs_auth .wwebjs_cache; do
     if [ ! -d "$dir" ]; then
       echo "📁 Criando diretório '$dir'..."
-          touch grupos_visitados.txt
-    touch grupos_autorizados.txt
-    touch grupos_mensagens.txt
       mkdir -p "$dir"
     else
       echo "✅ Diretório '$dir' já existe."
@@ -32,10 +16,21 @@ check_and_create_folders() {
   done
 }
 
+# Função para criar arquivos se não existirem
+check_and_create_files() {
+  for file in grupos_visitados.txt grupos_autorizados.txt grupos_mensagens.txt; do
+    if [ ! -f "$file" ]; then
+      echo "📝 Criando arquivo '$file'..."
+      touch "$file"
+    fi
+  done
+}
+
 case "$1" in
 start)
-  echo "📂 Verificando pastas necessárias..."
+  echo "📂 Verificando estrutura..."
   check_and_create_folders
+  check_and_create_files
 
   echo "🔄 Atualizando o repositório..."
   git pull origin main
@@ -51,7 +46,6 @@ start)
 stop)
   echo "🛑 Parando o bot..."
   docker compose stop
-  echo "✅ Bot parado!"
   ;;
 restart)
   echo "🔁 Reiniciando o bot..."
@@ -71,6 +65,3 @@ logs)
   exit 1
   ;;
 esac
-
-
-
