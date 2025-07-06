@@ -3,8 +3,6 @@ FROM node:20
 # Evita erro de sandbox e display ausente
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-RUN apt-get install -y chromium-browser --no-install-recommends
-
 
 # Instala Chromium e dependências do Puppeteer
 RUN apt-get update && apt-get install -y \
