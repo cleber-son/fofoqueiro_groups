@@ -1,0 +1,20 @@
+services:
+  whatsapp-bot:
+    container_name: growpages_bot
+    build: .
+    env_file:
+      - .env
+
+    working_dir: /app
+    volumes:
+      - ./logs:/app/logs
+      - ./.wwebjs_auth:/app/.wwebjs_auth
+      - ./.webjs_cache:/app/.webjs_cache
+      - ./grupos.txt:/app/grupos.txt
+      - ./numeros_gpt.txt:/app/numeros_gpt.txt
+      - ./palavras_proibidas.txt:/app/palavras_proibidas.txt
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+
+

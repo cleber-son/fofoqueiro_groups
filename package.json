@@ -1,0 +1,15 @@
+{
+  "name": "whatsapp-grupo-bot",
+  "version": "1.0.0",
+  "description": "Bot para entrar em grupos do WhatsApp automaticamente",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "whatsapp-web.js": "^1.21.1",
+    "qrcode-terminal": "^0.12.0",
+    "fs-extra": "^11.1.1"
+  }
+}
