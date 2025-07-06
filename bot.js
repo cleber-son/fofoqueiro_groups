@@ -59,7 +59,7 @@ async function iniciarBot() {
   const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-      headless: true,
+      headless: false, // estava true
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
   });
