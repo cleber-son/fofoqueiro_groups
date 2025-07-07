@@ -65,7 +65,7 @@ async function iniciarBot() {
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: '/usr/bin/chromium',
-        headless: false,
+        headless: 'new',
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
     });
