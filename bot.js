@@ -61,14 +61,14 @@ function esperar(ms) {
 }
 
 async function iniciarBot() {
-    const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        executablePath: '/usr/bin/chromium',
-        headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    },
-    });
+const client = new Client({
+  authStrategy: new LocalAuth(),
+  puppeteer: {
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  },
+});
+
 
 
 
@@ -86,6 +86,14 @@ async function iniciarBot() {
 
   client.on('message', async msg => {
     try {
+      const agora = Date.now();
+      const tempoMsg = msg.timestamp * 1000;
+      if (agora - tempoMsg > 2 * 60 * 1000) {
+        logConsole(`⏳ Ignorando mensagem antiga (${Math.round((agora - tempoMsg) / 1000)}s atrás)`);
+        return;
+      }
+
+
       const chat = await msg.getChat();
       logConsole(`📩 Mensagem recebida de ${chat.name || chat.id.user}: ${msg.body}`);
 
