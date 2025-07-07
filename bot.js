@@ -129,7 +129,8 @@ async function iniciarBot() {
         for (let tentativa = 1; tentativa <= 5; tentativa++) {
           await esperar(ESPERA_CARREGAR_CHAT_MS);
           const allChats = await client.getChats();
-          joinedChat = allChats.find(c => c.isGroup && c.inviteCode === groupCode);
+          joinedChat = allChats.find(c => c.isGroup && c.name && c.name.includes('grupo')); // exemplo
+
           if (joinedChat) break;
         }
 

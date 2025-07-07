@@ -6,6 +6,8 @@
 #==================================================
 
 # Função para criar pastas se não existirem
+export $(grep -v '^#' .env | xargs)
+
 check_and_create_folders() {
   for dir in logs .wwebjs_auth .wwebjs_cache; do
     if [ ! -d "$dir" ]; then
@@ -48,7 +50,7 @@ start)
 
 interactive)
   echo "🧪 Rodando bot em modo interativo (permite entrada de teclas)..."
-  docker compose run --rm whatsapp-bot
+  docker compose run --rm ${CONTAINER_NAME}
   ;;
 
 stop)
